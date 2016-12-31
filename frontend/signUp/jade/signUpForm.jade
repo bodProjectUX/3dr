@@ -1,0 +1,31 @@
+form
+	md-input-container.md-block
+		label Username
+		input(type='text', ng-model='vm.newUser.username', ng-required, ng-keypress="vm.register($event)", tdr-focus="true")
+	md-input-container.md-block
+		label Email
+		input(type='email', ng-model='vm.newUser.email', ng-required, ng-keypress="vm.register($event)")
+	md-input-container.md-block(md-no-float)
+		label Password
+		input(type='password', ng-model='vm.newUser.password', ng-required ng-keypress="vm.register($event)")
+
+	// Hidden inputs to prevent autofill
+	#signUpFormHiddenInputs(ng-show="false", layout="column")
+		input(type='text')
+		input(type='email')
+		input(type='password')
+
+	#tc(layout="row", layout-align="start start", flex, ng-if="vm.showLegalText")
+		md-checkbox.md-accent(ng-model="vm.newUser.tcAgreed" aria-label="Terms and conditions Checkbox")
+		div(layout="row", layout-align="start center")
+			p(ng-bind-html="vm.legalText")
+	#loginCaptcha(vc-recaptcha, key="vm.captchaKey", ng-model="vm.reCaptchaResponse", ng-if="vm.useReCapthca")
+	div(layout="row", layout-align="start center")
+		md-button.md-accent.md-raised(ng-click="vm.register()", ng-disabled="vm.registering", flex="none") {{vm.buttonLabel}}
+		#registerWait(ng-if="vm.registering", layout="row", layout-align="start center")
+			p Signing up...
+			md-progress-circular(md-mode="indeterminate", md-diameter="20")
+	h4.registerError {{vm.registerErrorMessage}}
+	div
+		a.registerLinks(target="_blank", href="/pricing") Pricing
+		a.registerLinks(href="/") Log in

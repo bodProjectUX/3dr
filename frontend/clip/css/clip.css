@@ -1,0 +1,24 @@
+clip {
+  display: block;
+  width: 100%;
+  padding: 20px 0 10px;
+}
+
+clip md-radio-button .md-label {
+  margin-right: 30px;
+}
+
+clip #clipAxislabel {
+  margin-right: 10px;
+}
+
+.clipSlider {
+  margin-top: 20px;
+}
+.clipSlider md-slider {
+  width: 200px;
+  padding-right: 20px;
+}
+.clipSlider input {
+  width: 50px;
+}

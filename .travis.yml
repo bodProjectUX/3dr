@@ -1,0 +1,43 @@
+language: node_js
+git:
+  submodules: false
+node_js:
+    - "4.1"
+env:
+  - CXX=g++-4.8
+sudo: required
+dist: trusty
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
+before_install:
+    - mkdir -p submodules
+    - cd submodules
+    - git clone https://$TESTS_USER:$TESTS_PASSWORD@github.com/3drepo/tests.git
+    - git submodule init
+    - git submodule update
+    - cd ..
+    - sudo apt-get install graphicsmagick
+    - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+    - echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
+    - sudo apt-get update
+    - sudo apt-get install -y mongodb-org
+    - mongod --version
+    - sudo service mongod start
+    - npm install -g grunt-cli
+    - sleep 15
+    - cd submodules/tests/backend
+    - mongorestore
+install: npm install
+services:
+  - rabbitmq
+script:
+    - npm test
+    - npm run test-int
+notifications:
+    email: 
+        recipients:
+            - team@3drepo.org

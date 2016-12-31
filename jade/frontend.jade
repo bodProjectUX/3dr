@@ -1,0 +1,83 @@
+doctype html
+html(lang="en" ng-app="3drepo")
+	head
+		base(href="/")
+
+		// Meta, title, CSS, favicons, etc.
+		meta(charset='utf-8')
+		meta(http-equiv='X-UA-Compatible', content='IE=edge')
+
+		title 3D Repo | Online BIM collaboration platform
+
+		script(type="text/javascript", src="/public/plugins/base/config.js")
+
+		// ReCapthca
+		script(src="//www.google.com/recaptcha/api.js?render=explicit&onload=vcRecaptchaApiLoaded", async, defer)
+
+		// CSS Files
+		each val, key in cssfiles
+			link(rel='stylesheet', type='text/css', href=val)
+
+		// All CSS minified
+		link(rel='stylesheet', type='text/css', href='/public/dist/three_d_repo.min.css')
+
+		// Styling used in the Angular Material demos
+		link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic")
+
+		// JS Files
+		each val, key in jsfiles
+			script(type="text/javascript", src=val)
+
+		if gaTrackId
+			script.
+				(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+				})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+				ga('create', '!{gaTrackId}', 'auto');
+
+
+		// Predefine the app
+		script.
+			angular.module('3drepo', ['ui.router', 'ngMaterial', 'ngAnimate', 'ngSanitize', 'vcRecaptcha'])
+			.constant('structure', !{structure})
+			.constant('parentStates', !{parentStateJSON})
+			//.constant('pluginLevels', !{pluginLevelsJSON})
+			.constant('uiState', !{uistate});
+
+		// Plugin JS and Angular files
+		//script(type="text/javascript", src='/public/dist/plugins.min.js')
+		script(type="text/javascript", src='/public/dist/three_d_repo.js')
+
+		// Plugin JS Files
+		//each val in pluginJS
+			script(type="text/javascript", src=val)
+
+		// Plugin Angular Files
+		//each plugin in pluginAngular
+			each file in plugin.files
+				script(type="text/javascript", src=file)
+
+		// Plugin CSS Files
+		//each css in pluginCSS
+			link(href=css, rel='stylesheet', type="text/css")
+
+	body
+
+		// Plugin JADE Files
+		//each j in pluginJade
+			script(type="text/ng-template", id=j.id)
+				!= renderMe('./plugins/' + j.template, locals)
+
+		// Frontend plugin JADE Files
+		each j in frontendJade
+			script(type="text/ng-template", id=j.id)
+				!= renderMe(j.path, locals)
+
+		// Legal pages
+		each j in legalTemplates
+			script(type="text/ng-template", id=j.page+".html")
+				!= renderMe(j.path, locals)
+
+		home
